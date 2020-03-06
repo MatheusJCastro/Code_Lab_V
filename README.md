@@ -19,7 +19,7 @@ Em sistemas linux rode o comando no terminal para executar o programa:
 ## Configuração
 **Para configurar o programa abra o arquivo "medidas.py" e modifique as seguintes linhas:**
 	
-* Para colocar os dias em que houve tomada de dados:
+* Colocar os dias em que houve tomada de dados:
 		
 		dias = [...]
 	
@@ -27,7 +27,7 @@ Em sistemas linux rode o comando no terminal para executar o programa:
 	
 		dias = ["0503", "0603"]
 	
-* Modifique o *1* em *bias=1* e *lamp=1* para *0* caso não queria tirar algum dos tipos de ruído.
+* Modifique o `1` em `bias=1` e `lamp=1` para `0` caso não queria tirar algum dos tipos de ruído na linha:
 	
 		reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=1)
 		
@@ -38,18 +38,23 @@ Em sistemas linux rode o comando no terminal para executar o programa:
 		save_new_data(reduced)
 		
 	O programa criará uma pasta com o nome `reduced_data` e salvará todos os arquivo individualmente no mesmo formato dos arquivos de entrada, acrescentando apenas *"reduced"* no final de cada arquivo.  
-	**Atenção:** Cada vez que executado, o programa sobrescreve os arquivos que contêm o mesmo nome.
+	
+	>**Atenção:** Cada vez que executado, o programa sobrescreve os arquivos que contêm o mesmo nome.
 
 ### Plotar e Salvar Gráficos
 
-* Descomente essa linha caso queira plotar todos os gráficos de frequência:
+* Descomente essa linha para plotar todos os gráficos de frequência:
 
 		plot_all(reduced, save=False)
 
 	Troque False para True caso queira salvar uma imagem png do gráfico.
 	
-* Descomente essa linha caso queira plotar um gráfico de uma intensidade k (todas frequências):
+	![](Plot_of_all_data.png)
+	
+* Descomente essa linha  plotar um gráfico de uma intensidade k (todas frequências):
 		
 		plot_same_intensity(reduced, save=False, k=100)
 
 	Troque False para True caso queira salvar uma imagem png do gráfico.
+	
+	![](Plot_same_intensity.png)
