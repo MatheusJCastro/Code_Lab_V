@@ -10,12 +10,6 @@ Exemplo: `0503_amarelo_100.csv`
 O programa foi feito para funcionar com o arquivo original gerado pelo ProKeithley 6487.  
 Todos os arquivos devem estar na mesma pasta em que o *medidas.py*.  
 
-## Execução
-Para rodar o código é necessario ter *Python3*, *Numpy* e *Matplotlib* instalados.  
-Em sistemas linux rode o comando no terminal para executar o programa:
-	
-	python3 medidas.py
-
 ## Configuração
 **Para configurar o programa abra o arquivo "medidas.py" e modifique as seguintes linhas:**
 	
@@ -58,3 +52,10 @@ Em sistemas linux rode o comando no terminal para executar o programa:
 	Troque False para True caso queira salvar uma imagem png do gráfico.
 	
 	![](Plot_same_intensity.png)
+	
+
+## Execução
+Para rodar o código é necessario ter *Python3*, *Numpy* e *Matplotlib* instalados.  
+Em sistemas linux rode o comando no terminal para executar o programa:
+	
+	python3 medidas.py
