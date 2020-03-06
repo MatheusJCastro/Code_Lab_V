@@ -1,6 +1,6 @@
 # Efeito Fotoelétrico
 O objetivo desse programa é remover os ruídos dos dados do Experimento 1 de Física Experimental V.  
-O programa pode ser encontrado clicando aqui: [MatheusJCastro - Code_Lab_V](https://github.com/MatheusJCastro/Code_Lab_V/). Ou em:
+O programa pode ser encontrado clicando [aqui](https://github.com/MatheusJCastro/Code_Lab_V/) ou em:
 
 > <https://github.com/MatheusJCastro/Code_Lab_V/>
 
