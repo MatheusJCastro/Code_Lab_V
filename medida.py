@@ -122,7 +122,38 @@ def save_new_data(data):
                 if i in data and j in data[i] and k in data[i][j]:
                     if not os.path.exists("reduced_data"):
                         os.mkdir("reduced_data")
-                    np.savetxt("reduced_data/{}_{}_{}_reduced.csv".format(i, j, k), np.asarray(data[i][j][k]).T, fmt="%s", delimiter=",")
+                    np.savetxt("reduced_data/{}_{}_{}_reduced.csv".format(i, j, k), np.asarray(data[i][j][k]).T,
+                               fmt="%s", delimiter=",")
+
+
+def method_1(data):
+    results = {}
+    for i in dias:
+        for j in cores:
+            for k in intensidade:
+                if i in data and j in data[i] and k in data[i][j]:
+                    medida = data[i][j][k]
+                    smaller = -10
+                    for m in range(len(medida[1])):
+                        current = medida[1][m]
+                        last = medida[1][m - 1]
+
+                        '''
+                        if current > 0:
+                            last = medida[1][m - 1]
+                            mod_last = -last
+                            if 0 < current < mod_last:
+                                smaller = current
+                                break
+                            elif 0 < mod_last < current:
+                                smaller = mod_last
+                                break
+                        '''
+                    print(smaller)
+                    #print(medida)
+                    results["{}_{}_{}".format(i, j, k)] = medida[0][medida[1].index(smaller)]
+            break
+    print(results)
 
 
 dt, noi_bias, noi_lamp = input_data()
@@ -133,3 +164,4 @@ reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=1)  # troque de 1 p
 #plot_same_intensity(reduced, save=False, k=100)  # descomente essa linha para plotar um grafico com todas as
                                                 # frequencias em uma determinada intensidade (k)
                                                 # caso deseje salvar qualquer plot, troque False para True
+# method_1(reduced)  # não está pronto
