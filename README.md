@@ -46,7 +46,7 @@ totalmente tampada. Já o `lamp` se refere a medida tomada com a lampada desliga
 
 	Troque False para True caso queira salvar uma imagem png do gráfico.
 	
-	![](Plot_of_all_data.png)
+	![](Plot_of_all_data_example.png)
 	
 * Descomente essa linha  plotar um gráfico de uma intensidade k (todas frequências):
 		
@@ -54,7 +54,7 @@ totalmente tampada. Já o `lamp` se refere a medida tomada com a lampada desliga
 
 	Troque False para True caso queira salvar uma imagem png do gráfico.
 	
-	![](Plot_same_intensity.png)
+	![](Plot_same_intensity_example.png)
 	
 
 ## Execução
