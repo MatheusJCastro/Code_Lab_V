@@ -160,7 +160,7 @@ dt, noi_bias, noi_lamp = input_data()
 reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=1)  # troque de 1 para 0 caso não vá remover algum dos
                                                                  # tipos de ruido
 #save_new_data(reduced)  # descomente essa linha para salvar os dados no formato .csv
-#plot_all(reduced, save=True)  # descomente essa linha para plotar todos os dados
+#plot_all(reduced, save=False)  # descomente essa linha para plotar todos os dados
 #plot_same_intensity(reduced, save=False, k=100)  # descomente essa linha para plotar um grafico com todas as
                                                 # frequencias em uma determinada intensidade (k)
                                                 # caso deseje salvar qualquer plot, troque False para True
