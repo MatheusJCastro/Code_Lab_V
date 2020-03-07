@@ -25,6 +25,9 @@ Todos os arquivos devem estar na mesma pasta em que o *medidas.py*.
 	
 		reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=1)
 		
+	O ruído `bias` se refere a medida tomada com a fenda da fotocélula
+totalmente tampada. Já o `lamp` se refere a medida tomada com a lampada desligada.
+		
 ### Salvar novos dados em *.csv*
 
 * Para salvar todos os dados sem o ruído no formato csv, descomente a linha:
