@@ -1,7 +1,7 @@
 ################################################################
 # Redução de Dados Física Experimental V - Efeito Fotoelétrico #
 # Matheus J. Castro                                            #
-# Version 3.1                                                  #
+# Version 4.1                                                  #
 # Last Modification: 6 de Março de 2020                        #
 ################################################################
 
@@ -56,7 +56,8 @@ def noise_removal(final_data, noise_bias, noise_lamp, bias=1, lamp=1):
     return final_data
 
 
-def plot_all(data, save=False):
+def plot_all(data, method_1, save=False, show_meth_1=False):
+    color = {100: "black", 80: "blue", 60: "red", 40: "green", 20: "yellow"}
     if (len(cores) % 2) == 0:
         col = len(cores) / 2
     else:
@@ -76,12 +77,16 @@ def plot_all(data, save=False):
         # plt.figtext(0.75, 0.5, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
         # plt.figtext(0.18, 0.1, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
         # plt.figtext(0.45, 0.1, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
+        legenda = []
         for k in intensidade:
             for i in dias:
                 if i in data and cores[j] in data[i] and k in data[i][cores[j]]:
                     x = np.array(data[i][cores[j]][k][0])
                     y = np.array(data[i][cores[j]][k][1])
-                    plt.plot(x, y, ".", markersize=1)
+                    legenda.append(plt.plot(x, y, "-", markersize=1, color=color[k], label="{}%".format(k)))
+                    if show_meth_1:
+                        plt.plot(method_1["{}_{}_{}".format(i, cores[j], k)], 0, ".", markersize=10, color=color[k])
+        plt.legend(loc="upper left")
         plt.grid()
 
     if save:
@@ -89,9 +94,8 @@ def plot_all(data, save=False):
     plt.show()
 
 
-def plot_same_intensity(data, k=100, save=False):
+def plot_same_intensity(data, method_1, k=100, save=False, show_meth_1=False):
     color = {cores[0]: "violet", cores[1]: "blue", cores[2]: "green", cores[3]: "yellow", cores[4]: "red"}
-    cor_cap = []
 
     plt.figure(figsize=(8, 4.5))
     plt.xlabel("Tensão [V]")
@@ -101,13 +105,14 @@ def plot_same_intensity(data, k=100, save=False):
     plt.ylim(-1 * pow(10, -9), 2 * pow(10, -8))
     # plt.figtext(0.15, 0.1, "Exemplo", fontsize=100, color='gray')
     for j in cores:
-        cor_cap.append(j.capitalize())
         for i in dias:
             if i in data and j in data[i] and k in data[i][j]:
                 x = np.array(data[i][j][k][0])
                 y = np.array(data[i][j][k][1])
-                plt.plot(x, y, ".", markersize=2, color=color[j])
-    plt.legend(cor_cap)
+                plt.plot(x, y, "-", markersize=1, color=color[j], label=j.capitalize())
+                if show_meth_1:
+                    plt.plot(method_1["{}_{}_{}".format(i, j, k)], 0, ".", markersize=10, color=color[j])
+    plt.legend()
     plt.grid()
 
     if save:
@@ -126,42 +131,34 @@ def save_new_data(data):
                                fmt="%s", delimiter=",")
 
 
-def method_1(data):
+def method_1(data, save=False):
     results = {}
     for i in dias:
         for j in cores:
             for k in intensidade:
                 if i in data and j in data[i] and k in data[i][j]:
-                    medida = data[i][j][k]
-                    smaller = -10
+                    medida = np.copy(data[i][j][k]).tolist()
                     for m in range(len(medida[1])):
                         current = medida[1][m]
-                        last = medida[1][m - 1]
+                        if current < 0:
+                            medida[1][m] = -medida[1][m]
+                    results["{}_{}_{}".format(i, j, k)] = medida[0][medida[1].index(min(medida[1]))]
 
-                        '''
-                        if current > 0:
-                            last = medida[1][m - 1]
-                            mod_last = -last
-                            if 0 < current < mod_last:
-                                smaller = current
-                                break
-                            elif 0 < mod_last < current:
-                                smaller = mod_last
-                                break
-                        '''
-                    print(smaller)
-                    #print(medida)
-                    results["{}_{}_{}".format(i, j, k)] = medida[0][medida[1].index(smaller)]
-            break
-    print(results)
+    if save:
+        if not os.path.exists("reduced_data"):
+            os.mkdir("reduced_data")
+        np.savetxt("reduced_data/1st_method_results.csv", list(results.items()), fmt="%s", delimiter=",")
+
+    return results
 
 
+results_1 = {}
 dt, noi_bias, noi_lamp = input_data()
-reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=1)  # troque de 1 para 0 caso não vá remover algum dos
+reduced = noise_removal(dt, noi_bias, noi_lamp, bias=0, lamp=0)  # troque de 1 para 0 caso não vá remover algum dos
                                                                  # tipos de ruido
 #save_new_data(reduced)  # descomente essa linha para salvar os dados no formato .csv
-#plot_all(reduced, save=False)  # descomente essa linha para plotar todos os dados
-#plot_same_intensity(reduced, save=False, k=100)  # descomente essa linha para plotar um grafico com todas as
+#results_1 = method_1(reduced, save=False)  # não está pronto
+#plot_all(reduced, results_1, save=False, show_meth_1=False)  # descomente essa linha para plotar todos os dados
+#plot_same_intensity(reduced, results_1, save=False, k=100, show_meth_1=False)  # descomente essa linha para plotar um grafico com todas as
                                                 # frequencias em uma determinada intensidade (k)
                                                 # caso deseje salvar qualquer plot, troque False para True
-# method_1(reduced)  # não está pronto
