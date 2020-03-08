@@ -2,7 +2,7 @@
 # Redução de Dados Física Experimental V - Efeito Fotoelétrico #
 # Matheus J. Castro                                            #
 # Version 4.1                                                  #
-# Last Modification: 6 de Março de 2020                        #
+# Last Modification: 7 de Março de 2020                        #
 ################################################################
 
 import numpy as np
