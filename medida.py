@@ -85,7 +85,8 @@ def plot_all(data, meth_1, meth_3, save=False, show_meth_1=False, show_meth_3=Fa
                     y = np.array(data[i][cores[j]][k][1])
                     legenda.append(plt.plot(x, y, "-", markersize=1, color=color[k], label="{}%".format(k)))
                     if show_meth_1:
-                        plt.plot(meth_1["{}_{}_{}".format(i, cores[j], k)], 0, ".", markersize=10, color=color[k], label="Método 1")
+                        plt.plot(meth_1["{}_{}_{}".format(i, cores[j], k)], 0, ".", markersize=10, color=color[k],
+                                 label="Método 1")
         if show_meth_3:
             plt.plot(meth_3["{}".format(cores[j])], 0, "*", markersize=10, color="gray", label="Método 3")
         plt.legend(loc="upper left")
