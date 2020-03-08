@@ -83,3 +83,7 @@ Para salvar os resultados em um arquivo *.csv*, troque `False` para `True`. O pr
 Há a possibilidade de plotar os resultados nos gráficos, para isso troque o `False` para `True` em `show_meth_3=False` nas linhas que habilitam o plot dos gráficos, conforme pode ser observado na seção **Plotar e Salvar Gráficos**.
 
 > Para que o plot dos dados do método 1 funcione, é necessário que a linha que executa o método 1 esteja descomentada.
+
+## Exemplo de Gráficos com os métodos 1 e 3 aplicados
+![](Plot_of_all_data_dots_example.png)
+![](Plot_same_intensity_dots_example.png)
