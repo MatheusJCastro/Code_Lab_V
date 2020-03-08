@@ -72,3 +72,14 @@ Para salvar os resultados em um arquivo *.csv*, troque `False` para `True`. O pr
 Há a possibilidade de plotar os resultados nos gráficos, para isso troque o `False` para `True` em `show_meth_1=False` nas linhas que habilitam o plot dos gráficos, conforme pode ser observado na seção **Plotar e Salvar Gráficos**.
 
 > Para que o plot dos dados do método 1 funcione, é necessário que a linha que executa o método 1 esteja descomentada.
+
+## Método 3
+O método 3 consiste em pegar a interseção das cruvas de intensidade de uma determinada frequência. Para isso o programa pega o valor em Volts da interseção de duas retas, dando como resultado a mediana dos valores.  
+Para executar o método 3, descomente a linha:
+
+	results_2 = method_3(reduced, save=False)
+	
+Para salvar os resultados em um arquivo *.csv*, troque `False` para `True`. O programa cria a pasta `reduced_data` e salva o arquivo com nome "*3st_method_results.csv*" dentro dessa pasta.  
+Há a possibilidade de plotar os resultados nos gráficos, para isso troque o `False` para `True` em `show_meth_3=False` nas linhas que habilitam o plot dos gráficos, conforme pode ser observado na seção **Plotar e Salvar Gráficos**.
+
+> Para que o plot dos dados do método 1 funcione, é necessário que a linha que executa o método 1 esteja descomentada.

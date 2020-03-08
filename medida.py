@@ -1,8 +1,8 @@
 ################################################################
 # Redução de Dados Física Experimental V - Efeito Fotoelétrico #
 # Matheus J. Castro                                            #
-# Version 4.1                                                  #
-# Last Modification: 7 de Março de 2020                        #
+# Version 5.2                                                  #
+# Last Modification: 8 de Março de 2020                        #
 ################################################################
 
 import numpy as np
@@ -12,7 +12,9 @@ import matplotlib.pyplot as plt
 cores = ["violeta", "azul", "verde", "amarelo", "vermelho"]
 intensidade = [100, 80, 60, 40, 20]
 dias = ["0503", "0603"]  # modifique essa lista colocando os dias que houve tomada de dados
-                         # apenas fomato DDMM entre aspas duplas
+
+
+# apenas fomato DDMM entre aspas duplas
 
 
 def input_data():
@@ -49,14 +51,14 @@ def noise_removal(final_data, noise_bias, noise_lamp, bias=1, lamp=1):
                 if i in final_data and j in final_data[i] and k in final_data[i][j]:
                     reduce = []
                     for m in range(len(noise_bias[0])):
-                        reduce.append(final_data[i][j][k][m][1] - (bias*noise_bias[dias.index(i)][m][1] +
-                                                                   lamp*noise_lamp[dias.index(i)][m][1]))
+                        reduce.append(final_data[i][j][k][m][1] - (bias * noise_bias[dias.index(i)][m][1] +
+                                                                   lamp * noise_lamp[dias.index(i)][m][1]))
                     final_data[i][j][k] = [final_data[i][j][k].T[0], reduce]
 
     return final_data
 
 
-def plot_all(data, method_1, save=False, show_meth_1=False):
+def plot_all(data, meth_1, meth_3, save=False, show_meth_1=False, show_meth_3=False):
     color = {100: "black", 80: "blue", 60: "red", 40: "green", 20: "yellow"}
     if (len(cores) % 2) == 0:
         col = len(cores) / 2
@@ -66,7 +68,7 @@ def plot_all(data, method_1, save=False, show_meth_1=False):
     plt.figure(figsize=(16, 10))
 
     for j in range(len(cores)):
-        plt.subplot(2, col, j+1)
+        plt.subplot(2, col, j + 1)
         plt.xlabel("Tensão [V]")
         plt.ylabel("Corrente [nA]")
         plt.title(cores[j].capitalize())
@@ -85,7 +87,9 @@ def plot_all(data, method_1, save=False, show_meth_1=False):
                     y = np.array(data[i][cores[j]][k][1])
                     legenda.append(plt.plot(x, y, "-", markersize=1, color=color[k], label="{}%".format(k)))
                     if show_meth_1:
-                        plt.plot(method_1["{}_{}_{}".format(i, cores[j], k)], 0, ".", markersize=10, color=color[k])
+                        plt.plot(meth_1["{}_{}_{}".format(i, cores[j], k)], 0, ".", markersize=10, color=color[k], label="Método 1")
+        if show_meth_3:
+            plt.plot(meth_3["{}".format(cores[j])], 0, "*", markersize=10, color="gray", label="Método 3")
         plt.legend(loc="upper left")
         plt.grid()
 
@@ -94,7 +98,7 @@ def plot_all(data, method_1, save=False, show_meth_1=False):
     plt.show()
 
 
-def plot_same_intensity(data, method_1, k=100, save=False, show_meth_1=False):
+def plot_same_intensity(data, meth_1, meth_3, k=100, save=False, show_meth_1=False, show_meth_3=False):
     color = {cores[0]: "violet", cores[1]: "blue", cores[2]: "green", cores[3]: "yellow", cores[4]: "red"}
 
     plt.figure(figsize=(8, 4.5))
@@ -111,7 +115,9 @@ def plot_same_intensity(data, method_1, k=100, save=False, show_meth_1=False):
                 y = np.array(data[i][j][k][1])
                 plt.plot(x, y, "-", markersize=1, color=color[j], label=j.capitalize())
                 if show_meth_1:
-                    plt.plot(method_1["{}_{}_{}".format(i, j, k)], 0, ".", markersize=10, color=color[j])
+                    plt.plot(meth_1["{}_{}_{}".format(i, j, k)], 0, ".", markersize=10, color=color[j])
+        if show_meth_3:
+            plt.plot(meth_3["{}".format(j)], 0, "*", markersize=10, color=color[j])
     plt.legend()
     plt.grid()
 
@@ -152,13 +158,55 @@ def method_1(data, save=False):
     return results
 
 
+def method_3(data, save=False):
+    results = {}
+    for j in cores:
+        par_result = []
+        for k in range(len(intensidade)):
+            cur = True
+            las = True
+            current = []
+            last = []
+            while (cur is True) or (las is True):
+                for i in dias:
+                    if j in data[i] and intensidade[k] in data[i][j]:
+                        current = data[i][j][intensidade[k]]
+                        cur = False
+                    if j in data[i] and intensidade[k - 1] in data[i][j]:
+                        last = data[i][j][intensidade[k - 1]]
+                        las = False
+            compar = []
+            for m in range(len(current[1])):
+                if current[1][m] - last[1][m] < 0:
+                    compar.append([current[0][m], -(current[1][m] - last[1][m])])
+                else:
+                    compar.append([current[0][m], current[1][m] - last[1][m]])
+            compar = np.asarray(compar).T
+            par_result.append(compar[0][list(compar[1]).index(min(compar[1]))])
+
+            par_result.sort()
+            if len(par_result) % 2 == 1:
+                results["{}".format(j)] = par_result[len(par_result) // 2]
+            elif len(par_result) % 2 == 0:
+                results["{}".format(j)] = np.mean([par_result[len(par_result) // 2 - 1],
+                                                   par_result[len(par_result) // 2]])
+    if save:
+        if not os.path.exists("reduced_data"):
+            os.mkdir("reduced_data")
+        np.savetxt("reduced_data/3st_method_results.csv", list(results.items()), fmt="%s", delimiter=",")
+
+    return results
+
+
 results_1 = {}
+results_2 = {}
 dt, noi_bias, noi_lamp = input_data()
-reduced = noise_removal(dt, noi_bias, noi_lamp, bias=0, lamp=0)  # troque de 1 para 0 caso não vá remover algum dos
-                                                                 # tipos de ruido
-#save_new_data(reduced)  # descomente essa linha para salvar os dados no formato .csv
+reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=0)  # troque de 1 para 0 caso não vá remover algum dos
+# tipos de ruido
+# save_new_data(reduced)  # descomente essa linha para salvar os dados no formato .csv
 #results_1 = method_1(reduced, save=False)  # não está pronto
-#plot_all(reduced, results_1, save=False, show_meth_1=False)  # descomente essa linha para plotar todos os dados
-#plot_same_intensity(reduced, results_1, save=False, k=100, show_meth_1=False)  # descomente essa linha para plotar um grafico com todas as
-                                                # frequencias em uma determinada intensidade (k)
-                                                # caso deseje salvar qualquer plot, troque False para True
+#results_2 = method_3(reduced, save=False)
+#plot_all(reduced, results_1, results_2, save=False, show_meth_1=False, show_meth_3=False)  # descomente essa linha para plotar todos os dados
+#plot_same_intensity(reduced, results_1, results_2, save=False, k=100, show_meth_1=False, show_meth_3=False)   # descomente essa linha para plotar um grafico com todas as
+                                                                                            # frequencias em uma determinada intensidade (k)
+                                                                                            # caso deseje salvar qualquer plot, troque False para True
