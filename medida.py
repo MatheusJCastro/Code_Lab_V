@@ -74,11 +74,9 @@ def plot_all(data, meth_1, meth_3, save=False, show_meth_1=False, show_meth_3=Fa
         plt.title(cores[j].capitalize())
         plt.xlim(-10, 10)
         plt.ylim(-1 * pow(10, -9), 2 * pow(10, -8))
-        # plt.figtext(0.18, 0.5, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
-        # plt.figtext(0.45, 0.5, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
-        # plt.figtext(0.75, 0.5, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
-        # plt.figtext(0.18, 0.1, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
-        # plt.figtext(0.45, 0.1, "Exemplo", fontsize=50, color='gray', alpha=50, rotation=25)
+        # for x in np.linspace(0, 1, 20):
+        #    for y in np.linspace(0, 1, 20):
+        #        plt.figtext(x, y, "Exemplo", fontsize=10, color='gray', alpha=.25, rotation=25)
         legenda = []
         for k in intensidade:
             for i in dias:
@@ -107,7 +105,9 @@ def plot_same_intensity(data, meth_1, meth_3, k=100, save=False, show_meth_1=Fal
     plt.title("Todas as Frequências - {}%".format(k))
     plt.xlim(-10, 10)
     plt.ylim(-1 * pow(10, -9), 2 * pow(10, -8))
-    # plt.figtext(0.15, 0.1, "Exemplo", fontsize=100, color='gray')
+    # for x in np.linspace(0, 1, 12):
+    #    for y in np.linspace(0, 1, 12):
+    #        plt.figtext(x, y, "Exemplo", fontsize=10, color='gray', alpha=.5, rotation=25)
     for j in cores:
         for i in dias:
             if i in data and j in data[i] and k in data[i][j]:
@@ -202,7 +202,7 @@ results_1 = {}
 results_2 = {}
 dt, noi_bias, noi_lamp = input_data()
 reduced = noise_removal(dt, noi_bias, noi_lamp, bias=1, lamp=0)  # troque de 1 para 0 caso não vá remover algum dos
-# tipos de ruido
+                                                                 # tipos de ruido
 # save_new_data(reduced)  # descomente essa linha para salvar os dados no formato .csv
 #results_1 = method_1(reduced, save=False)  # não está pronto
 #results_2 = method_3(reduced, save=False)
