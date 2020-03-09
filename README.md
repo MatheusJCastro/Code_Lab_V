@@ -37,7 +37,7 @@ No primeiro campo, selecione os ruídos que deseja retirar. As opções são `Bi
 
 > **Atenção:** Mesmo que não vá remover nenhum ruído, é necessario clicar em `Remover ruído`.
 
-Se escolher salvar os novos dados, o programa criará uma pasta com o nome `reduced_data` e salvará todos os arquivo individualmente no mesmo formato dos arquivos de entrada, acrescentando apenas *"reduced"* no final de cada arquivo.  
+Se escolher salvar os novos dados, o programa criará uma pasta com o nome `reduced_data` e salvará todos os arquivos individualmente no mesmo formato dos arquivos de entrada, acrescentando apenas *"reduced"* no final de cada um.  
 	
 >**Atenção:** Cada vez que executado, o programa sobrescreve os arquivos que contêm o mesmo nome.
 		
@@ -53,7 +53,7 @@ O método 3 consiste em pegar a interseção das cruvas de intensidade de uma de
 Para executar o método 3, maruqe a caixa `3` em `Selecione os métodos que deseja calcular:`. Para salvar os resultados em um arquivo *.csv* marque a caixa de seleção do lado do botão `Calcular`. O programa cria a pasta `reduced_data` e salva o arquivo com nome "*3st_method_results.csv*" dentro dessa pasta.  
 Há a possibilidade de plotar os resultados nos gráficos, para isso siga as instruções na seção **Plotar e Salvar Gráficos**. 
 
-### Plotar e Salvar Gráficos
+## Plotar e Salvar Gráficos
 
 * Para plotar todos os gráficos de frequência, selecione `Mostrar` e depois em `Gerar`. Para salvar, selecione tambám `Salvar`. Um exemplo do gráfico gerado pode ser observado na imagem a seguir:
 	
