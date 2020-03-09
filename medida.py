@@ -2,7 +2,7 @@
 # Redução de Dados Física Experimental V - Efeito Fotoelétrico #
 # Matheus J. Castro                                            #
 # Version 6.0                                                  #
-# Last Modification: 8 de Março de 2020                        #
+# Last Modification: 9 de Março de 2020                        #
 ################################################################
 
 import numpy as np
@@ -341,7 +341,8 @@ def plot_same_menu():
         show4 = True
 
     if reduced_status:
-        plot_same_intensity(reduced, results_1, results_3, show=plot2_op.get(), save=False, k=inten_op.get(), show_meth_1=show1, show_meth_3=show3)
+        plot_same_intensity(reduced, results_1, results_3, show=plot2_op.get(), save=save_plot2_op.get(),
+                            k=inten_op.get(), show_meth_1=show1, show_meth_3=show3)
 
 
 def main():
@@ -393,10 +394,10 @@ def main():
     tk.Label(window, text="Gráfico de uma\nintensidade:").grid(row=13, column=0, columnspan=1, rowspan=2, sticky=tk.W + tk.E + tk.N + tk.S)
     tk.Label(window, text="Escolha uma intensidade:").grid(row=13, column=1, columnspan=2, sticky=tk.W + tk.E + tk.N + tk.S)
     tk.OptionMenu(window, inten_op, *[100, 80, 60, 40, 20]).grid(row=13, column=3, columnspan=1, sticky=tk.W + tk.E + tk.N + tk.S)
-    plot1_button = tk.Checkbutton(window, text="Mostrar", variable=plot2_op, onvalue=True, offvalue=False)
-    plot1_button.grid(row=14, column=1, sticky=tk.W + tk.E + tk.N + tk.S)
-    save_plot1_button = tk.Checkbutton(window, text="Salvar", variable=save_plot2_op, onvalue=True, offvalue=False)
-    save_plot1_button.grid(row=14, column=2, sticky=tk.W + tk.E + tk.N + tk.S)
+    plot2_button = tk.Checkbutton(window, text="Mostrar", variable=plot2_op, onvalue=True, offvalue=False)
+    plot2_button.grid(row=14, column=1, sticky=tk.W + tk.E + tk.N + tk.S)
+    save_plot2_button = tk.Checkbutton(window, text="Salvar", variable=save_plot2_op, onvalue=True, offvalue=False)
+    save_plot2_button.grid(row=14, column=2, sticky=tk.W + tk.E + tk.N + tk.S)
     tk.Button(window, text="Gerar", command=plot_same_menu).grid(row=14, column=3, columnspan=1, sticky=tk.W + tk.E + tk.N + tk.S)
     ######################################################################################
     # End menu
