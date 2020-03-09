@@ -47,7 +47,7 @@ O ruído `Bias` se refere a medida tomada com a fenda da fotocélula totalmente 
 O método 1 consiste em pegar o ponto mais próximo de 0 e atribuir esse valor a V0.  
 Para obter o resultado do método 1 para todos os gráficos, maruqe a caixa `1` em `Selecione os métodos que deseja calcular:`. Para salvar os resultados em um arquivo *.csv* marque a caixa de seleção do lado do botão `Calcular`. O programa cria a pasta `reduced_data` e salva o arquivo com nome "*1st_method_results.csv*" dentro dessa pasta.  
 Há a possibilidade de plotar os resultados nos gráficos, para isso siga as instruções na seção **Plotar e Salvar Gráficos**.
-
+.
 ## Método 3
 O método 3 consiste em pegar a interseção das cruvas de intensidade de uma determinada frequência. Para isso o programa pega o valor em Volts da interseção de duas retas, dando como resultado a mediana dos valores.  
 Para executar o método 3, maruqe a caixa `3` em `Selecione os métodos que deseja calcular:`. Para salvar os resultados em um arquivo *.csv* marque a caixa de seleção do lado do botão `Calcular`. O programa cria a pasta `reduced_data` e salva o arquivo com nome "*3st_method_results.csv*" dentro dessa pasta.  
