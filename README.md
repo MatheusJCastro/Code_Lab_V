@@ -55,11 +55,11 @@ Há a possibilidade de plotar os resultados nos gráficos, para isso siga as ins
 
 ## Plotar e Salvar Gráficos
 
-* Para plotar todos os gráficos de frequência, selecione `Mostrar` e depois em `Gerar`. Para salvar, selecione tambám `Salvar`. Um exemplo do gráfico gerado pode ser observado na imagem a seguir:
+* Para plotar todos os gráficos de frequência, selecione `Mostrar` e depois em `Gerar`. Para salvar, selecione também `Salvar`. Um exemplo do gráfico gerado pode ser observado na imagem a seguir:
 	
 	![](Plot_of_all_data_example.png)
 	
-* Para plotar um gráfico de uma intensidade k (todas frequências), selecione a intensidade desejada ao lado de `Escolha uma intensidade:`, selecione a caixa `Mostrar` e clique em `Gerar`. Para salvar, selecione tambám `Salvar`. Abaixo, um exemplo do gráfico gerado:
+* Para plotar um gráfico de uma intensidade k (todas frequências), selecione a intensidade desejada ao lado de `Escolha uma intensidade:`, selecione a caixa `Mostrar` e clique em `Gerar`. Para salvar, selecione também `Salvar`. Abaixo, um exemplo do gráfico gerado:
 	
 	![](Plot_same_intensity_example.png)
 	
