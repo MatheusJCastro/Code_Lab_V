@@ -1,8 +1,8 @@
 ################################################################
 # Redução de Dados Física Experimental V - Efeito Fotoelétrico #
 # Matheus J. Castro                                            #
-# Version 7.0                                                  #
-# Last Modification: 14 de Março de 2020                       #
+# Version 8.4                                                  #
+# Last Modification: 15 de Março de 2020                       #
 ################################################################
 
 import numpy as np
@@ -21,7 +21,7 @@ window.title("Efeito Fotoelétrico por Matheus J. Castro")
 
 cores = ["violeta", "azul", "verde", "amarelo", "vermelho"]
 intensidade = [100, 80, 60, 40, 20]
-dias = ["1003"]  # modifique essa lista colocando os dias que houve tomada de dados"0503", "0603",
+dias = ["0503", "0603", "1003"]  # modifique essa lista colocando os dias que houve tomada de dados
 # apenas fomato DDMM entre aspas duplas
 
 
@@ -463,7 +463,7 @@ def method_3(data, save=False, save_residual=False, main_iten=100, sec_iten=80, 
                         plt.title("Gráfico de Residuos\nDiferença entre duas intensidades de uma mesma cor.")
                         plt.plot(main_array[0], dif, ".", markersize=5, label="Diferença Pontos")
                         plt.plot(main_array[0], dif, "-", markersize=0.5, label="Diferença Reta")
-                        plt.plot([-10,10],[0,0])
+                        plt.plot([-10, 10], [0, 0])
                         plt.plot(val, 0, ".", markersize=10, label="Valor Encontrado")
                         plt.legend()
                         plt.grid()
@@ -487,9 +487,104 @@ def method_3(data, save=False, save_residual=False, main_iten=100, sec_iten=80, 
         for i in range(len(results_array)):
             save_results.append([results_array[i][0], results_array[i][1][0], results_array[i][1][1]])
 
-        np.savetxt("reduced_data/3st_method_results.csv", save_results, fmt="%s", delimiter=",", header=head)
+        np.savetxt("reduced_data/3rd_method_results.csv", save_results, fmt="%s", delimiter=",", header=head)
 
     return results
+
+
+def planck_meth(result, show=False, save=False):
+    comp_cor = {cores[0]: 404.656, cores[1]: 435.835, cores[2]: 546.075,
+                cores[3]: np.average([576.961, 578.969]), cores[4]: 614.950}
+    eV = 1.602176634E-19  # J
+    m_nm = 1E-9  # nm
+    c = 299792458  # m/s
+
+    if meth_planck.get() == 1:
+        par_result = {}
+        for j in cores:
+            cor_par_result = []
+            for k in intensidade:
+                for i in dias:
+                    if "{}_{}_{}".format(i, j, k) in result:
+                        cor_par_result.append(result["{}_{}_{}".format(i, j, k)])
+            if len(cor_par_result) != 0:
+                cor_par_result = np.asarray(cor_par_result).T
+                cor_par_result = [np.median(cor_par_result[0]), np.median(cor_par_result[1])]
+                par_result[j] = cor_par_result
+        result = par_result
+
+    plot_lambda = []
+    plot_result = []
+    plot_error = []
+    plot_compar_max = []
+    plot_compar_min = []
+    for j in cores:
+        if j in result:
+            plot_lambda.append(c/(comp_cor[j]*m_nm))
+            plot_result.append(result[j][0]*eV)
+            plot_error.append(result[j][1]*eV)
+            plot_compar_max.append((result[j][0] + result[j][1])*eV)
+            plot_compar_min.append((result[j][0] - result[j][1])*eV)
+
+    ajuste_polinomial_Q2 = np.polyfit(plot_lambda, plot_compar_max, 1)
+    func1 = np.poly1d(ajuste_polinomial_Q2)
+    phi_max = func1(0)
+    h_max = func1(1) - phi_max
+
+    ajuste_polinomial_Q2 = np.polyfit(plot_lambda, plot_compar_min, 1)
+    func2 = np.poly1d(ajuste_polinomial_Q2)
+    phi_min = func2(0)
+    h_min = func2(1) - phi_min
+
+    ajuste_polinomial_Q2 = np.polyfit(plot_lambda, plot_result, 1)
+    func = np.poly1d(ajuste_polinomial_Q2)
+    phi = func(0)
+    h = func(1) - phi
+
+    func_x = np.linspace(plot_lambda[0], plot_lambda[-1], 5)
+    func_y = func(func_x)
+    func_y_max = func1(func_x)
+    func_y_min = func2(func_x)
+
+    inc_h = np.abs(np.average([h_max - h, h - h_min]))
+    inc_phi = np.average([phi_max - phi, phi - phi_min])/eV
+
+    phi = np.absolute(phi)/eV
+
+    plt.figure(figsize=(16, 9))
+    plt.xlabel("Frequência (c/\u03bb) [Hz]")
+    plt.ylabel("Energia (eVo) [J]")
+    plt.title("Energia x Comprimento de Onda")
+    plt.xlim(max(func_x)*1.01, min(func_x)*0.99)
+    # for x in np.linspace(0, 1, 12):
+    #    for y in np.linspace(0, 1, 12):
+    #        plt.figtext(x, y, "Exemplo", fontsize=10, color='gray', alpha=.5, rotation=25)
+    plt.errorbar(plot_lambda, plot_result, yerr=plot_error, fmt=".", markersize=10, label="eVo por f")
+    plt.plot(func_x, func_y, "-", label="Função ajustada")
+    plt.plot(func_x, func_y_max, "-", label="Função ajustada superior")
+    plt.plot(func_x, func_y_min, "-", label="Função ajustada inferior")
+    plt.figtext(0.3, 0.834, "h = {:.2e}+/-{:.2e} m\u00b2kg/s\n\u03d5 = {:.2f}+/-{:.2} V".format(np.abs(h), inc_h, phi, inc_phi),
+                bbox=dict(facecolor="cyan", alpha=1))
+    plt.legend(loc="upper left")
+    plt.grid()
+
+    if save:
+        if not os.path.exists("planck_results"):
+            os.mkdir("planck_results")
+        plt.savefig("planck_results/Plot_Planck_method_{}".format(meth_planck.get()))
+
+        head = "Frequência [Hz], Energia (eVo) [J], Incerteza Energia [J]"
+        save_results = np.asarray([plot_lambda, plot_result, plot_error]).T
+        np.savetxt("planck_results/{}_method_plot.csv".format(meth_planck.get()), save_results,
+                   fmt="%s", delimiter=",", header=head)
+        head = " , Constante de Planck [m\u00b2kg/s], \u03d5 [V]"
+        save_results = np.asarray([["Valor", "Incerteza"], [np.abs(h), inc_h], [phi, inc_phi]]).T
+        np.savetxt("planck_results/{}_method_results.csv".format(meth_planck.get()), save_results,
+                   fmt="%s", delimiter=",", header=head)
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
 
 def check():
@@ -566,6 +661,12 @@ def reset():
 
 def remove():
     global reduced, reduced_status
+    global calc_1, calc_2, calc_3, calc_4
+
+    calc_1 = False
+    calc_2 = False
+    calc_3 = False
+    calc_4 = False
 
     if repeat_op.get() == 0:
         log.config(text="Repetições deve ser maior que 0.")
@@ -588,7 +689,8 @@ def remove():
                 save_new_data(reduced)
             reduced_status = True
             verify_2.config(bg='lightgreen', text="Ruído removido")
-            status_calc.config(bg="red", text="Calcular")
+
+        status_calc.config(bg="red", text="Calcular")
 
 
 def calc():
@@ -669,6 +771,20 @@ def plot_same_menu():
         log.config(text="Aperte o botão \"Remover ruído\"")
 
 
+def plot_planck_menu():
+    global results_1, results_3
+    global calc_1, calc_2, calc_3, calc_4
+
+    log.config(text="")
+
+    if meth_planck.get() == 1 and calc_1:
+        planck_meth(results_1, save=save_planck.get(), show=plot_planck.get())
+    elif meth_planck.get() == 3 and calc_3:
+        planck_meth(results_3, save=save_planck.get(), show=plot_planck.get())
+    else:
+        log.config(text="O método selecionado não\nfoi calculado.")
+
+
 def main():
     ######################################################################################
     # Remove Noise menu
@@ -740,6 +856,16 @@ def main():
     tk.Label(window, text="Log:").grid(row=5, column=4, columnspan=3, sticky=tk.W + tk.E + tk.N + tk.S)
     log.grid(row=6, column=4, columnspan=3, rowspan=5, sticky=tk.W + tk.E + tk.N + tk.S)
     ######################################################################################
+    # planck Menu
+    tk.Label(window, text="Gráfico dos V0s pelo Comprimento de Onda:").grid(row=11, column=4, columnspan=3, sticky=tk.W + tk.E + tk.N + tk.S)
+    tk.Label(window, text="Qual método calcular:").grid(row=12, column=4, columnspan=2, sticky=tk.W + tk.E + tk.N + tk.S)
+    tk.OptionMenu(window, meth_planck, *[1, 3]).grid(row=12, column=6, columnspan=1, sticky=tk.W + tk.E + tk.N + tk.S)
+    plotplanck_button = tk.Checkbutton(window, text="Mostrar", variable=plot_planck, onvalue=True, offvalue=False)
+    plotplanck_button.grid(row=13, column=4, sticky=tk.W + tk.E + tk.N + tk.S)
+    save_planck_button = tk.Checkbutton(window, text="Salvar", variable=save_planck, onvalue=True, offvalue=False)
+    save_planck_button.grid(row=13, column=5, sticky=tk.W + tk.E + tk.N + tk.S)
+    tk.Button(window, text="Gerar", command=plot_planck_menu).grid(row=13, column=6, columnspan=1, sticky=tk.W + tk.E + tk.N + tk.S)
+    ######################################################################################
     # End menu
     tk.Button(window, text="Reset", command=reset).grid(row=15, column=0, columnspan=2, sticky=tk.W + tk.E + tk.N + tk.S)
     tk.Button(window, text="Quit", command=window.quit).grid(row=15, column=2, columnspan=2, sticky=tk.W + tk.E + tk.N + tk.S)
@@ -769,6 +895,10 @@ scale_plot1_op = tk.BooleanVar()
 scale_plot1_op.set(True)
 plot2_op = tk.BooleanVar()
 save_plot2_op = tk.BooleanVar()
+plot_planck = tk.BooleanVar()
+save_planck = tk.BooleanVar()
+meth_planck = tk.IntVar()
+meth_planck.set(1)
 meth1_show = tk.BooleanVar()
 meth2_show = tk.BooleanVar()
 meth3_show = tk.BooleanVar()
