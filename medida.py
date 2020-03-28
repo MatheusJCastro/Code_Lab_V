@@ -1004,3 +1004,4 @@ sigma_reduc_button = tk.OptionMenu(window, op_sig, *["Mediana dos Mínimos e Má
 log = tk.Label(window, text="", bg="white")
 
 main()
+
