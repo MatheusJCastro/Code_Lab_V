@@ -8,7 +8,8 @@ O programa pode ser encontrado clicando [aqui](https://github.com/MatheusJCastro
 Os dados devem estar no formato: `DDMM_COR_INTENSIDADE.csv`  
 Exemplo: `0503_amarelo_100.csv`  
 O programa foi feito para funcionar com o arquivo original gerado pelo ProKeithley 6487.  
-Todos os arquivos devem estar na mesma pasta em que o *medidas.py*.  
+Todos os arquivos devem estar em uma pasta com o nome `raw_data` e esta deve estar na mesma pasta em que o *medidas.py*.  
+O programa é case sensitive, ou seja, os nomes não devem conter maiúsculas a menos que especificado.  
 
 ## Configuração
 **Para configurar o programa abra o arquivo "*medidas.py*" e modifique as seguintes linhas:**
