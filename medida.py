@@ -21,7 +21,7 @@ window.title("Efeito Fotoelétrico por Matheus J. Castro")
 
 cores = ["violeta", "azul", "verde", "amarelo", "vermelho"]
 intensidade = [100, 80, 60, 40, 20]
-dias = ["0503", "0603", "1003"]  # modifique essa lista colocando os dias que houve tomada de dados
+dias = ["1003"]  # modifique essa lista colocando os dias que houve tomada de dados"0503", "0603",
 # apenas fomato DDMM entre aspas duplas
 
 
@@ -557,20 +557,6 @@ def planck_meth(result, show=False, save=False):
     comp_cor = get_lambda()[0]
     inc_comp_cor = get_lambda()[1]
 
-    '''if meth_planck.get() == 1:
-        par_result = {}
-        for j in cores:
-            cor_par_result = []
-            for k in intensidade:
-                for i in dias:
-                    if "{}_{}_{}".format(i, j, k) in result:
-                        cor_par_result.append(result["{}_{}_{}".format(i, j, k)])
-            if len(cor_par_result) != 0:
-                cor_par_result = np.asarray(cor_par_result).T
-                cor_par_result = [np.median(cor_par_result[0]), np.median(cor_par_result[1])]
-                par_result[j] = cor_par_result
-        result = par_result'''
-
     if meth_planck.get() == 1:
         par_result = {}
         for j in cores:
@@ -599,7 +585,8 @@ def planck_meth(result, show=False, save=False):
                 log.config(text="Arquivo \"cores.txt\" não \ncorresponde com os dados.")
                 return
             else:
-                abs_result = np.abs(result[j][0])
+                #abs_result = np.abs(result[j][0])
+                abs_result = result[j][0]
                 plot_lambda.append(c/(comp_cor[j]*m_nm))
                 plot_result.append(abs_result*eV)
                 plot_error_y.append(result[j][1]*eV)
